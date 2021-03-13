@@ -15,9 +15,15 @@ public class ProduceMessageController {
     @Autowired
     JmsProducer jmsProducer;
 
-    @PostMapping(value="/api/student")
-    public Student sendSMessage(@RequestBody Student student){
-        jmsProducer.sendMessage(student);
+    @PostMapping(value = "/api/send/message/queue")
+    public Student sendMessageToQueue(@RequestBody Student student) {
+        jmsProducer.sendMessageToQueue(student);
+        return student;
+    }
+
+    @PostMapping(value = "/api/send/message/topic")
+    public Student sendMessageToTopic(@RequestBody Student student) {
+        jmsProducer.sendMessageToTopic(student);
         return student;
     }
 }

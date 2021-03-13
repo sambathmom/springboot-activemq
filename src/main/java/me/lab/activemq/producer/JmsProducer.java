@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Queue;
+
 @Component
 @Slf4j
 public class JmsProducer {
@@ -17,12 +19,24 @@ public class JmsProducer {
     @Value("${active-mq.topic}")
     private String topic;
 
-    public void sendMessage(Student message){
-        try{
-            log.info("Attempting Send message to Topic: "+ topic);
+    @Autowired
+    private Queue queue;
+
+    public void sendMessageToQueue(Student message) {
+        try {
+            log.info("Attempting Send message to queue: " + queue);
+            jmsTemplate.convertAndSend(queue, message);
+        } catch (Exception e) {
+            log.error("Received Exception during send Message Queeu: ", e);
+        }
+    }
+
+    public void sendMessageToTopic(Student message) {
+        try {
+            log.info("Attempting Send message to topic: " + topic);
             jmsTemplate.convertAndSend(topic, message);
-        } catch(Exception e){
-           log.error("Recieved Exception during send Message: ", e);
+        } catch (Exception e) {
+            log.error("Received Exception during send Message Topic: ", e);
         }
     }
 }

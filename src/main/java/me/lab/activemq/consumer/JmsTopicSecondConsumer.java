@@ -11,19 +11,18 @@ import javax.jms.ObjectMessage;
 
 @Component
 @Slf4j
-public class JmsConsumer implements MessageListener {
+public class JmsTopicSecondConsumer implements MessageListener {
 
     @Override
     @JmsListener(destination = "${active-mq.topic}") //Topic
     public void onMessage(Message message) {
-        try{
-            ObjectMessage objectMessage = (ObjectMessage)message;
+        try {
+            ObjectMessage objectMessage = (ObjectMessage) message;
             Student student = (Student) objectMessage.getObject();
-            //do additional processing
-            log.info("Thank you so much for this message. Love you!");
-            log.info("Received Message: "+ student.toString());
-        } catch(Exception e) {
-            log.error("Received Exception : "+ e);
+            Thread.sleep(10 * 1000);
+            log.info("Second Message Topic receiver: " + student.toString());
+        } catch (Exception e) {
+            log.error("Second Message Topic receiver exception : " + e);
         }
 
     }
