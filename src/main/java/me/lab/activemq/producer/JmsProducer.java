@@ -1,6 +1,7 @@
 package me.lab.activemq.producer;
 
 import lombok.extern.slf4j.Slf4j;
+import me.lab.activemq.config.ProducerActiveMQConfig;
 import me.lab.activemq.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,15 +20,13 @@ public class JmsProducer {
     @Value("${active-mq.topic}")
     private String topic;
 
-    @Autowired
-    private Queue queue;
 
     public void sendMessageToQueue(Student message) {
         try {
-            log.info("Attempting Send message to queue: " + queue);
-            jmsTemplate.convertAndSend(queue, message);
+            log.info("Attempting Send message to queue: " + ProducerActiveMQConfig.queueName);
+            jmsTemplate.convertAndSend(ProducerActiveMQConfig.queueName, message);
         } catch (Exception e) {
-            log.error("Received Exception during send Message Queeu: ", e);
+            log.error("Received Exception during send Message Queue: ", e);
         }
     }
 

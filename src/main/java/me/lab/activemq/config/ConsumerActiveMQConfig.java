@@ -10,11 +10,12 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import java.util.Arrays;
 
 @Configuration
-@EnableJms
 public class ConsumerActiveMQConfig {
 
     @Value("${active-mq.broker-url}")
     private String brokerUrl;
+
+    public static String queueName = "queue1";
 
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
@@ -36,7 +37,6 @@ public class ConsumerActiveMQConfig {
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(activeMQConnectionFactory());
-        // factory.setConcurrency("");
         factory.setPubSubDomain(true);
         return factory;
     }

@@ -1,11 +1,18 @@
 package me.lab.activemq.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
@@ -17,6 +24,11 @@ public class ProducerActiveMQConfig {
     private String brokerUrl;
 
     /**
+     * For send message as queue
+     */
+    public static String queueName = "queue1";
+
+    /**
      * For Producer and Consumer
      *
      * @return
@@ -25,22 +37,7 @@ public class ProducerActiveMQConfig {
     public ConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
         activeMQConnectionFactory.setBrokerURL(brokerUrl);
-
-        //TODO: Check with redelivery time
-        /*RedeliveryPolicy policy = new RedeliveryPolicy();
-        policy.setMaximumRedeliveries(2);
-        activeMQConnectionFactory.setRedeliveryPolicy(policy);*/
-
-        //TODO: Check activemq connection allow only with credential
-        /*activeMQConnectionFactory.setUserName("admin");
-        activeMQConnectionFactory.setPassword("admin1");*/
-
         return activeMQConnectionFactory;
-    }
-
-    @Bean
-    public Queue queue() {
-        return new ActiveMQQueue("testqueue");
     }
 
     /**
